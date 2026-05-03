@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome — Caroline Barker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,600;1,400&display=swap">
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      html, body {
+        width: 100%; height: 100%;
+        overflow: hidden;
+        background: #f5f3f0;
+      }
+
+      /* ── Scene ── */
+      .scene {
+        width: 100%; height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.7s ease;
+      }
+      .scene.fade-out { opacity: 0; pointer-events: none; }
+
+      /* ── Door container ─ all layers share the same footprint ── */
+      .door-scene {
+        position: relative;
+        display: inline-block;
+        height: 68vh;
+        cursor: default;
+        outline: none;
+      }
+
+      /* ── Doorknob hit area ── */
+      .doorknob-hit {
+        position: absolute;
+        top: 50%;
+        left: 54%;
+        width: 12%;
+        height: 15%;
+        cursor: pointer;
+        border-radius: 50%;
+        z-index: 10;
+      }
+      /* All images are sized identically so overlays register */
+      .door-scene img {
+        display: block;
+        height: 68vh;
+        width: auto;
+      }
+      .layer {
+        position: absolute;
+        top: 0; left: 0;
+        height: 68vh;
+        width: auto;
+      }
+
+      /* closed door is the base */
+      .door-closed { opacity: 1; transition: opacity 0.45s ease; }
+      /* opened door fades in on click */
+      .door-opened { opacity: 0; transition: opacity 0.45s ease; }
+
+      /* ── Doorknob overlay ── */
+      .doorknob {
+        position: absolute;
+        top: 57%;
+        left: 60%;
+        width: 4% !important;
+        height: auto !important;
+        transform-origin: center center;
+        pointer-events: none;
+        /* transition: opacity 0.3s ease; */
+      }
+      /* Always wiggle */
+      .doorknob {
+        animation: knob-wiggle 1.3s ease-in-out infinite;
+      }
+      /* Decisive turn on click */
+      .doorknob.turning {
+        animation: knob-turn 0.45s ease-in-out forwards !important;
+      }
+
+      @keyframes knob-wiggle {
+        0%, 100% { transform: rotate(0deg); }
+        30%       { transform: rotate(16deg); }
+        70%       { transform: rotate(-10deg); }
+      }
+      @keyframes knob-turn {
+        0%   { transform: rotate(0deg); }
+        40%  { transform: rotate(30deg); }
+        75%  { transform: rotate(-6deg); }
+        100% { transform: rotate(0deg); }
+      }
+
+
+
+      /* ── Skip link ── */
+      .skip {
+        position: fixed;
+        bottom: 2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        font-family: "Instrument Sans", system-ui, sans-serif;
+        font-size: 0.78rem;
+        color: #9a8f80;
+        letter-spacing: 0.06em;
+        text-decoration: none;
+      }
+      .skip:hover { color: #5a5248; }
+    </style>
+  </head>
+  <body>
+
+    <div class="scene" id="scene">
+      <div class="door-scene" id="doorScene">
+
+        <!-- Base layer: closed door -->
+        <img class="door-closed" id="doorClosed"
+             src="assets/img/door-closed.png" alt="A closed door">
+
+        <!-- Opened door (fades in on click) -->
+        <img class="layer door-opened" id="doorOpened"
+             src="assets/img/door-opened.png" alt="">
+
+
+        <!-- Doorknob hit area (invisible, sits over the knob) -->
+        <div class="doorknob-hit" id="doorknobHit"
+             role="button" tabindex="0"
+             aria-label="Turn the doorknob to enter"></div>
+
+        <!-- Doorknob overlay -->
+        <img class="doorknob layer" id="doorknob"
+             src="assets/img/doorknob.png" alt="">
+
+
+      </div>
+    </div>
+
+    <a class="skip" href="index.html">skip intro →</a>
+
+    <script>
+      const doorknobHit = document.getElementById('doorknobHit');
+      const doorClosed  = document.getElementById('doorClosed');
+      const doorOpened  = document.getElementById('doorOpened');
+      const doorknob    = document.getElementById('doorknob');
+      const scene       = document.getElementById('scene');
+      let clicked = false;
+
+      function openDoor() {
+        if (clicked) return;
+        clicked = true;
+
+        doorknob.classList.add('turning');
+
+        setTimeout(() => {
+          doorClosed.style.opacity = '0';
+          doorOpened.style.opacity = '1';
+          doorknob.style.opacity = '0';
+        }, 500);
+
+        setTimeout(() => scene.classList.add('fade-out'), 1350);
+        setTimeout(() => { window.location.href = 'home.html'; }, 2050);
+      }
+
+      doorknobHit.addEventListener('click', openDoor);
+      doorknobHit.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') openDoor();
+      });
+    </script>
+
+  </body>
+</html>
