@@ -83,18 +83,16 @@
         100% { clip-path: inset(100% 0 0 0); }
       }
 
-      /* ── Contact: quick pen-stroke, long linger, slow erase (7.5s) ── */
-      /* draws fast left→right, holds, then slowly erases left→right */
       .ov-contact {
         clip-path: inset(0 100% 0 0);
-        animation: contact-loop 7.5s linear infinite both;
-        animation-delay: 1.4s;
+        animation: contact-loop 10s linear infinite both;
+        animation-delay: 0.4s;
       }
       @keyframes contact-loop {
-        0%   { clip-path: inset(0 100% 0 0);  animation-timing-function: cubic-bezier(0.5,0,1,1); }
-        13%  { clip-path: inset(0 0%   0 0);  animation-timing-function: linear; }
-        60%  { clip-path: inset(0 0%   0 0);  animation-timing-function: cubic-bezier(0,0,0.5,1); }
-        80%  { clip-path: inset(0 0% 0 100%); animation-timing-function: linear; }
+        0%   { clip-path: inset(0 100% 0 0);  animation-timing-function: cubic-bezier(0.1,0,0.4,1); }
+        28%  { clip-path: inset(0 0%   0 0);  animation-timing-function: linear; }
+        65%  { clip-path: inset(0 0%   0 0);  animation-timing-function: cubic-bezier(0,0,0.5,1); }
+        82%  { clip-path: inset(0 0% 0 100%); animation-timing-function: linear; }
         100% { clip-path: inset(0 0% 0 100%); }
       }
 
@@ -192,19 +190,19 @@
 
         <!-- Menu board → Portfolio/Experience -->
         <a class="hotspot hs-menu"
-           href="index.html"
+           href="experience.html"
            data-label="Experience & projects"
            aria-label="Experience and projects"></a>
 
         <!-- Contact Me sign → Contact -->
         <a class="hotspot hs-contact"
            href="contact.html"
-           data-label="Contact me"
-           aria-label="Contact me"></a>
+           data-label="Contact"
+           aria-label="Contact"></a>
 
       </div>
     </div>
 
-    <a class="back" href="entrance.html">← back to entrance</a>
+    <a class="back" href="index.html">← back to entrance</a>
   </body>
 </html>

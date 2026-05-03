@@ -3,135 +3,204 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Caroline Barker | Software Engineer</title>
-    <meta name="description" content="Caroline Barker — Software Engineer at Microsoft Azure. NYU CS grad with experience across distributed systems, cloud infrastructure, and full-stack development.">
+    <title>☕ Caroline Barker</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;600;700&family=Instrument+Serif:ital@1&family=Inter:wght@300;400;500&display=swap">
-    <link rel="stylesheet" href="assets/css/site.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,600;1,400&display=swap">
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      html, body {
+        width: 100%; height: 100%;
+        overflow: hidden;
+        background: #f5f3f0;
+      }
+
+      /* ── Scene ── */
+      .scene {
+        width: 100%; height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.7s ease;
+      }
+      .scene.fade-out { opacity: 0; pointer-events: none; }
+
+      /* ── Door container ─ all layers share the same footprint ── */
+      .door-scene {
+        position: relative;
+        display: inline-block;
+        height: 68vh;
+        cursor: default;
+        outline: none;
+      }
+
+      /* ── Doorknob hit area ── */
+      .doorknob-hit {
+        position: absolute;
+        top: 55%;
+        left: 60%;
+        width: 5%;
+        height: 8%;
+        cursor: pointer;
+        border-radius: 50%;
+        z-index: 10;
+      }
+      /* All images are sized identically so overlays register */
+      .door-scene img {
+        display: block;
+        height: 68vh;
+        width: auto;
+      }
+      .layer {
+        position: absolute;
+        top: 0; left: 0;
+        height: 68vh;
+        width: auto;
+      }
+
+      /* closed door is the base */
+      .door-closed { opacity: 1; transition: opacity 0.45s ease; }
+      /* opened door fades in on click */
+      .door-opened { opacity: 0; transition: opacity 0.45s ease; }
+
+      /* ── Doorknob overlay ── */
+      .doorknob {
+        position: absolute;
+        top: 57%;
+        left: 60%;
+        width: 4% !important;
+        height: auto !important;
+        transform-origin: center center;
+        pointer-events: none;
+      }
+      .doorknob {
+        animation: knob-wiggle 1.3s ease-in-out 1.5s infinite both;
+      }
+      /* Decisive turn on click */
+      .doorknob.turning {
+        animation: knob-turn 0.45s ease-in-out forwards !important;
+      }
+
+      @keyframes knob-wiggle {
+        0%, 100% { transform: rotate(0deg); }
+        30%       { transform: rotate(16deg); }
+        70%       { transform: rotate(-10deg); }
+      }
+      @keyframes knob-turn {
+        0%   { transform: rotate(0deg); }
+        40%  { transform: rotate(30deg); }
+        75%  { transform: rotate(-6deg); }
+        100% { transform: rotate(0deg); }
+      }
+
+
+
+      /* ── Sign flip & swing ── */
+      .sign-wrap {
+        position: absolute;
+        top: 0; left: 0;
+        height: 68vh;
+        width: auto;
+        transition: opacity 0.45s ease;
+        pointer-events: none;
+      }
+      .sign-face {
+        display: block;
+        position: absolute;
+        top: 0; left: 0;
+        height: 68vh;
+        width: auto;
+      }
+      .sign-empty {
+        animation: sign-flip-out 0.35s ease-in 0.8s both;
+      }
+      .sign-welcome {
+        animation: sign-flip-in 0.35s ease-out 1.15s both;
+      }
+      @keyframes sign-flip-out {
+        from { transform: scaleX(1); }
+        to   { transform: scaleX(0); }
+      }
+      @keyframes sign-flip-in {
+        from { transform: scaleX(0); }
+        to   { transform: scaleX(1); }
+      }
+      /* ── Skip link ── */
+      .skip {
+        position: fixed;
+        bottom: 2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        font-family: "Instrument Sans", system-ui, sans-serif;
+        font-size: 0.78rem;
+        color: #9a8f80;
+        letter-spacing: 0.06em;
+        text-decoration: none;
+      }
+      .skip:hover { color: #5a5248; }
+    </style>
   </head>
-  <body class="home-page">
-    <header class="home-header">
-      <div class="home-container home-nav">
-        <a class="home-brand" href="/">Caroline Barker</a>
-        <nav class="home-nav-links" aria-label="Primary">
-          <a href="#experience">Experience</a>
-          <a href="#projects">Projects</a>
-          <a href="#contact">Contact</a>
-        </nav>
+  <body>
+
+    <div class="scene" id="scene">
+      <div class="door-scene" id="doorScene">
+
+        <img class="door-closed" id="doorClosed"
+             src="assets/img/empty-door-closed.png" alt="A closed door">
+
+        <img class="layer door-opened" id="doorOpened"
+             src="assets/img/door-opened.png" alt="">
+
+        <div class="sign-wrap">
+          <img class="sign-face sign-empty"   src="assets/img/empty-sign.png"   alt="">
+          <img class="sign-face sign-welcome" src="assets/img/welcome-sign.png" alt="">
+        </div>
+
+        <div class="doorknob-hit" id="doorknobHit"
+             role="button" tabindex="0"
+             aria-label="Turn the doorknob to enter"></div>
+
+        <img class="doorknob layer" id="doorknob"
+             src="assets/img/doorknob.png" alt="">
+
+
       </div>
-    </header>
+    </div>
 
-    <main class="home-container">
+    <a class="skip" href="cafe-interior.html">skip intro →</a>
 
-      <section class="h-intro" id="about">
-        <div class="h-photo">
-          <img src="assets/img/caroline.jpg" alt="Caroline Barker">
-        </div>
-        <div class="h-text">
-          <h1>Hi, I'm Caroline.</h1>
-          
-          <p> I'm a distributed systems and cloud infrastructure engineer building reliable, secure container platforms. </p>
-          <p> Currently, I work on the Azure Container Registry at Microsoft, improving multi-tenant performance and resiliency, leading zero-downtime migrations to Kubernetes, and modernizing identity-based security for services operating at global, high-throughput scale.</p>
-          <div class="h-links">
-            <a class="h-link" href="https://linkedin.com/in/CarolineNBarker" target="_blank" rel="noopener">LinkedIn &rarr;</a>
-            <a class="h-link" href="mailto:CarolineNBarker8@gmail.com">Email &rarr;</a>
-          </div>
-        </div>
-      </section>
+    <script>
+      const doorknobHit = document.getElementById('doorknobHit');
+      const doorClosed  = document.getElementById('doorClosed');
+      const doorOpened  = document.getElementById('doorOpened');
+      const doorknob    = document.getElementById('doorknob');
+      const signWrap    = document.querySelector('.sign-wrap');
+      const scene       = document.getElementById('scene');
+      let clicked = false;
 
-      <section class="h-section" id="experience">
-        <h2 class="h-section-title">Currently</h2>
-        <div class="h-work-list">
+      function openDoor() {
+        if (clicked) return;
+        clicked = true;
 
-          <div class="h-work-item">
-            <div class="h-work-row">
-              <span class="h-work-name">Microsoft Azure, Container Registry Team</span>
-              <span class="h-work-year">Aug 2022 &ndash; Present</span>
-            </div>
-            <p class="h-work-role">Software Engineer II &middot; Redmond, WA</p>
-          </div>
+        doorknob.classList.add('turning');
 
-        </div>
-      </section>
+        setTimeout(() => {
+          doorClosed.style.opacity = '0';
+          doorOpened.style.opacity = '1';
+          doorknob.style.opacity = '0';
+          signWrap.style.opacity = '0';
+        }, 500);
 
-        <section class="h-section" id="experience">
-          <h2 class="h-section-title">Prev</h2>
-          <div class="h-work-list">
+        setTimeout(() => scene.classList.add('fade-out'), 1350);
+        setTimeout(() => { window.location.href = 'cafe-interior.html'; }, 2050);
+      }
 
-          <div class="h-work-item">
-            <div class="h-work-row">
-              <span class="h-work-name">MIT Lincoln Laboratory</span>
-              <span class="h-work-year">Sept 2021 &ndash; Dec 2021</span>
-            </div>
-            <p class="h-work-role">Software Engineer Intern &middot; Boston, MA</p>
-          </div>
+      doorknobHit.addEventListener('click', openDoor);
+      doorknobHit.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') openDoor();
+      });
+    </script>
 
-          <div class="h-work-item">
-            <div class="h-work-row">
-              <span class="h-work-name">Microsoft </span>
-              <span class="h-work-year">Jun 2021 &ndash; Aug 2021</span>
-            </div>
-            <p class="h-work-role">Software Engineer Intern &middot; Redmond, WA</p>
-          </div>
-
-          <div class="h-work-item">
-            <div class="h-work-row">
-              <span class="h-work-name">Apple </span>
-              <span class="h-work-year">Jan 2021 &ndash; May 2021</span>
-            </div>
-            <p class="h-work-role">Software Engineer Intern &middot; Cupertino, CA</p>
-          </div>
-
-        </div>
-      </section>
-
-      <section class="h-section" id="projects">
-        <h2 class="h-section-title">Education</h2>
-        <div class="h-work-list">
-
-          <div class="h-work-item">
-            <div class="h-work-row">
-              <span class="h-work-name">NYU Tandon School of Engineering</span>
-            </div>
-            <p class="h-work-role">B.S. Computer Science; Minors in Business, Music, Math</p>
-          </div>
-
-        </div>
-      </section>
-
-      <section class="h-section" id="projects">
-        <h2 class="h-section-title">Projects</h2>
-        <div class="h-work-list">
-
-          <div class="h-work-item">
-            <div class="h-work-row">
-              <span class="h-work-name">Interpretable NLP Rule-Extraction</span>
-              <span class="h-work-year">Oct 2025 &ndash; Present</span>
-            </div>
-            <p class="h-work-role">Research &middot; NYU VIDA Lab</p>
-            <p class="h-work-desc">Generating human-readable rules for black-box text classifiers using surrogate decision trees trained on CountVectorizer features with NLP preprocessing (stop-word removal, lemmatization).</p>
-          </div>
-
-        </div>
-      </section>
-
-      <section class="h-section" id="contact">
-        <h2 class="h-section-title">Contact</h2>
-        <p class="h-contact-text">
-          Reach me at <a class="h-link" href="mailto:CarolineNBarker8@gmail.com">CarolineNBarker8@gmail.com</a>
-          or connect on <a class="h-link" href="https://linkedin.com/in/CarolineNBarker" target="_blank" rel="noopener">LinkedIn</a>.
-        </p>
-      </section>
-
-    </main>
-
-    <footer class="home-footer">
-      <div class="home-container">
-        <span>&copy; <span id="current-year"></span> Caroline Barker</span>
-      </div>
-    </footer>
-
-    <script src="assets/js/home.js"></script>
   </body>
 </html>
