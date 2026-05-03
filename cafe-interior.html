@@ -159,6 +159,67 @@
         height: 18%;
       }
 
+      /* ── Music player ── */
+      .ov-music-box {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        object-fit: contain;
+        pointer-events: none;
+      }
+      .ov-music-notes {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        object-fit: contain;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+      }
+      .ov-music-notes.playing {
+        opacity: 1;
+        animation: notes-sway 2.5s ease-in-out infinite;
+      }
+      @keyframes notes-sway {
+        0%   { transform: rotate(.5deg); }
+        50%  { transform: rotate(-.4deg);  }
+        100% { transform: rotate(.5deg); }
+      }
+      .music-hit {
+        position: absolute;
+        top: 53%;
+        left: 80%;
+        width: 8%;
+        height: 11%;
+        cursor: pointer;
+        background: none;
+        border: none;
+        border-radius: 6px;
+        z-index: 10;
+        transition: background 0.2s ease;
+      }
+      .music-hit:hover {
+        background: rgba(74, 108, 196, 0.08);
+      }
+      .music-hit::after {
+        content: attr(data-label);
+        position: absolute;
+        bottom: calc(100% + 8px);
+        left: 50%;
+        transform: translateX(-50%);
+        background: #1c1c1c;
+        color: #fff;
+        font-size: 0.72rem;
+        letter-spacing: 0.06em;
+        padding: 0.3rem 0.6rem;
+        border-radius: 4px;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s ease;
+      }
+      .music-hit:hover::after { opacity: 1; }
+
       /* ── Skip / back link ── */
       .back {
         position: fixed;
@@ -178,9 +239,12 @@
 
         <img src="assets/img/home-cafe.png" alt="Café illustration with menu, apron, and contact sign">
 
-        <img class="overlay ov-apron"   src="assets/img/apron.png"   alt="">
-        <img class="overlay ov-boxes"   src="assets/img/boxes.png"   alt="">
-        <img class="overlay ov-contact" src="assets/img/contact.png" alt="">
+        <img class="overlay ov-apron"       src="assets/img/apron.png"        alt="">
+        <img class="overlay ov-boxes"       src="assets/img/boxes.png"        alt="">
+        <img class="overlay ov-contact"     src="assets/img/contact.png"      alt="">
+        <img class="ov-music-box"           src="assets/img/music-box.png"    alt="">
+        <img class="ov-music-notes" id="musicNotes" src="assets/img/music-notes.png" alt="">
+        <button class="music-hit" id="musicBtn" data-label="Music toggle" aria-label="Toggle music"></button>
 
         <!-- Apron → About -->
         <a class="hotspot hs-apron"
@@ -204,5 +268,22 @@
     </div>
 
     <a class="back" href="index.html">← back to entrance</a>
+
+    <audio id="bgMusic" src="assets/audio/lofi-beats.m4a" loop preload="auto"></audio>
+
+    <script>
+      const audio  = document.getElementById('bgMusic');
+      const btn    = document.getElementById('musicBtn');
+      const notes  = document.getElementById('musicNotes');
+      audio.volume = 0.18;
+
+      function setPlaying(on) {
+        if (on) { audio.play(); notes.classList.add('playing'); }
+        else    { audio.pause(); notes.classList.remove('playing'); }
+      }
+
+      audio.play().then(() => notes.classList.add('playing')).catch(() => {});
+      btn.addEventListener('click', () => setPlaying(audio.paused));
+    </script>
   </body>
 </html>
