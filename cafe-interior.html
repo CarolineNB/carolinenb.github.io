@@ -28,9 +28,11 @@
       /* ── Café illustration container ── */
       .cafe-wrap {
         position: relative;
-        /* image is 1080×810, aspect ratio 4:3 */
         width: min(55vw, calc(68vh * 4 / 3));
         aspect-ratio: 4 / 3;
+      }
+      @media (max-width: 768px) {
+        .cafe-wrap { width: min(96vw, calc(60vh * 4 / 3)); }
       }
 
       .cafe-wrap {
