@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Caroline Barker</title>
+    <link rel="icon" type="image/png" href="assets/img/favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;600&display=swap">
@@ -286,6 +287,20 @@
 
       audio.play().then(() => notes.classList.add('playing')).catch(() => {});
       btn.addEventListener('click', () => setPlaying(audio.paused));
+
+      // Fade out scene before navigating
+      document.querySelectorAll('a[href]').forEach(a => {
+        const href = a.getAttribute('href');
+        if (href && !href.startsWith('mailto:') && !href.startsWith('http') && !href.startsWith('//') && !href.startsWith('#')) {
+          a.addEventListener('click', e => {
+            e.preventDefault();
+            const scene = document.querySelector('.scene');
+            scene.style.transition = 'opacity 0.4s ease';
+            scene.style.opacity = '0';
+            setTimeout(() => { window.location.href = href; }, 400);
+          });
+        }
+      });
     </script>
   </body>
 </html>

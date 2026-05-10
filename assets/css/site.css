@@ -6,8 +6,8 @@
   --ink-soft: #5f5576;
   --card: rgba(255, 255, 255, 0.92);
   --line: #e6d9f5;
-  --accent: #ac5ddf;
-  --accent-strong: #8d46c2;
+  --accent: #9a7b4f;
+  --accent-strong: #7a6035;
   --pink: #f57db4;
   --mint: #8dd9cc;
   --shadow: 0 8px 22px rgba(93, 55, 120, 0.13);
@@ -77,6 +77,18 @@ a { color: inherit; }
   font-family: "Inter", system-ui, sans-serif;
   font-size: 15px;
   line-height: 1.65;
+  animation: page-fade-in 0.55s ease both;
+}
+@keyframes page-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.home-page.fade-out {
+  animation: page-fade-out 0.35s ease forwards;
+}
+@keyframes page-fade-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
 }
 
 .home-container {
@@ -244,10 +256,68 @@ a.h-work-name:hover { color: var(--accent); }
   font-size: 0.82rem;
 }
 
+/* Back to café link */
+.back-cafe {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  font-family: "Instrument Sans", system-ui, sans-serif;
+  font-size: 0.78rem;
+  color: #9a8f80;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  z-index: 100;
+}
+.back-cafe:hover { color: #5a5248; }
+
+/* About — interest cards */
+.interest-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+}
+.interest-card {
+  background: #faf8f4;
+  border: 1px solid #e8e4de;
+  border-radius: 12px;
+  padding: 1.5rem 1.25rem 1.25rem;
+  text-align: center;
+  transform: rotate(var(--rotate, 0deg));
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.interest-card:hover {
+  transform: rotate(0deg) translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
+}
+.interest-card img {
+  width: 100%;
+  max-height: 130px;
+  object-fit: contain;
+  margin-bottom: 1rem;
+}
+.interest-card-name {
+  font-family: "Instrument Sans", system-ui, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: #999;
+  margin: 0 0 0.3rem;
+}
+.interest-card p:not(.interest-card-name) {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0;
+  line-height: 1.55;
+}
+
 /* Responsive */
 @media (max-width: 600px) {
   .h-intro { flex-direction: column; gap: 2rem; }
   .h-photo img, .h-photo-placeholder { width: 100%; height: 220px; }
   .home-header { margin-bottom: 2.5rem; }
+  .interest-grid { grid-template-columns: 1fr; gap: 1rem; }
+  .interest-card { transform: none !important; }
 }
 
